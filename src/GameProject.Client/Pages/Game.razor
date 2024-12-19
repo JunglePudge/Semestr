@@ -1,0 +1,73 @@
+@page "/game"
+@inject HttpClient Http
+
+<h3>Game Board</h3>
+
+<div class="board">
+    @foreach (var cell in Board)
+    {
+        <div class="cell @cell.Type">@cell.Id</div>
+    }
+</div>
+
+<div class="players">
+    @foreach (var player in Players)
+    {
+        <div>
+            <strong>@player.Name</strong>: Position @player.Position, Score @player.Score
+        </div>
+    }
+</div>
+
+@if (CardContent != null)
+{
+    <h4>@CardContent</h4>
+}
+
+@if (IsGameOver)
+{
+    <h2>Game Over! Winner: @Winner?.Name</h2>
+}
+else
+{
+    <button @onclick="RollDice">Roll Dice</button>
+    <p>Last Roll: @LastRoll</p>
+}
+
+@code {
+    private List<Cell> Board = new();
+    private List<Player> Players = new();
+    private string? CardContent;
+    private int LastRoll;
+    private bool IsGameOver = false;
+    private Player? Winner;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Board = await Http.GetFromJsonAsync<List<Cell>>("api/game/board");
+        Players = await Http.GetFromJsonAsync<List<Player>>("api/game/players");
+    }
+
+    private async Task RollDice()
+    {
+        LastRoll = new Random().Next(1, 7);
+        var playerId = Players[0].Id; // Assume first player's turn
+        var response = await Http.PostAsJsonAsync($"api/game/move/{playerId}", LastRoll);
+        var updatedPlayer = await response.Content.ReadFromJsonAsync<Player>();
+
+        var index = Players.FindIndex(p => p.Id == playerId);
+        Players[index] = updatedPlayer;
+
+        // Обновляем содержимое карточки
+        CardContent = response.Headers.Contains("Card-Content")
+            ? response.Headers.GetValues("Card-Content").FirstOrDefault()
+            : null;
+
+        var statusResponse = await Http.GetFromJsonAsync<dynamic>("api/game/status");
+        IsGameOver = statusResponse.IsGameOver;
+        if (IsGameOver)
+        {
+            Winner = Players.FirstOrDefault(p => p.IsWinner);
+        }
+    }
+}

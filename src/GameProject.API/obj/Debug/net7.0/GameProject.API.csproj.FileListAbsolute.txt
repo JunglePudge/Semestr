@@ -1,0 +1,7 @@
+D:\22\Semestr\src\GameProject.API\obj\Debug\net7.0\GameProject.API.csproj.AssemblyReference.cache
+D:\22\Semestr\src\GameProject.API\obj\Debug\net7.0\GameProject.API.GeneratedMSBuildEditorConfig.editorconfig
+D:\22\Semestr\src\GameProject.API\obj\Debug\net7.0\GameProject.API.AssemblyInfoInputs.cache
+D:\22\Semestr\src\GameProject.API\obj\Debug\net7.0\GameProject.API.AssemblyInfo.cs
+D:\22\Semestr\src\GameProject.API\obj\Debug\net7.0\GameProject.API.csproj.CoreCompileInputs.cache
+D:\22\Semestr\src\GameProject.API\obj\Debug\net7.0\GameProject.API.MvcApplicationPartsAssemblyInfo.cs
+D:\22\Semestr\src\GameProject.API\obj\Debug\net7.0\GameProject.API.MvcApplicationPartsAssemblyInfo.cache
